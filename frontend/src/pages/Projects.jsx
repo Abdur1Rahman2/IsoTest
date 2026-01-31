@@ -10,7 +10,7 @@ function Icon({ children }) {
   );
 }
 
-function SidebarItem({ active, label, icon, compact, onClick }) {
+function SidebarItem({ active, label, icon, onClick }) {
   return (
     <button
       type="button"
@@ -21,69 +21,82 @@ function SidebarItem({ active, label, icon, compact, onClick }) {
         {icon}
       </span>
       <span className="dash-navItem__label">{label}</span>
-      {compact ? null : <span className="dash-navItem__spacer" />}
     </button>
   );
 }
 
-function Kpi({ tone, value, label, badge }) {
+function ProjectCard({ title, date, endpoints, features, status, planners }) {
   return (
-    <div className="dash-kpi" role="button" tabIndex={0}>
-      <div className="dash-kpi__top">
-        <div className={`dash-kpi__icon dash-kpi__icon--${tone}`} aria-hidden="true" />
-        <div className={`dash-kpi__badge dash-kpi__badge--${badge.tone}`}>{badge.text}</div>
-      </div>
-      <div className="dash-kpi__value">{value}</div>
-      <div className="dash-kpi__label">{label}</div>
-    </div>
-  );
-}
-
-function ActivityRow({ method, path, time, status, inProgress }) {
-  return (
-    <div className={`dash-actRow${inProgress ? ' is-progress' : ''}`}>
-      <div className={`dash-actStatus dash-actStatus--${status}`} aria-hidden="true">
-        {status === 'success' ? (
-          <Icon>
-            <path
-              fill="currentColor"
-              d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-1.1 13.2-3-3a1 1 0 1 1 1.4-1.4l1.9 1.9 4.6-4.6a1 1 0 0 1 1.4 1.4l-6.3 6.3Z"
-            />
-          </Icon>
-        ) : status === 'fail' ? (
-          <Icon>
-            <path
-              fill="currentColor"
-              d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm3.5 13.4a1 1 0 0 1-1.4 0L12 13.3l-2.1 2.1a1 1 0 0 1-1.4-1.4l2.1-2.1-2.1-2.1a1 1 0 1 1 1.4-1.4l2.1 2.1 2.1-2.1a1 1 0 1 1 1.4 1.4L13.4 12l2.1 2.1a1 1 0 0 1 0 1.4Z"
-            />
-          </Icon>
-        ) : (
-          <span className="dash-spinner" aria-hidden="true" />
-        )}
-      </div>
-
-      <div className="dash-actMain">
-        <div className="dash-actLine">
-          <span className="dash-method">{method}</span>
-          <span className="dash-path">{path}</span>
-          {inProgress ? <span className="dash-cursor" aria-hidden="true" /> : null}
+    <div className="proj-card">
+      <div className="proj-card__top">
+        <div className="proj-card__left">
+          <div className="proj-icon" aria-hidden="true">
+            <Icon>
+              <path
+                fill="currentColor"
+                d="M5 5h14v12H5V5Zm2 2v8h10V7H7Zm1 9h8v1H8v-1Z"
+              />
+            </Icon>
+          </div>
+          <div>
+            <div className="proj-title">{title}</div>
+            <div className="proj-date">
+              <Icon>
+                <path
+                  fill="currentColor"
+                  d="M7 4h2V3h2v1h2V3h2v1h1a2 2 0 0 1 2 2v11H4V6a2 2 0 0 1 2-2h1Zm11 5H6v7h12V9Z"
+                />
+              </Icon>
+              <span>{date}</span>
+            </div>
+          </div>
         </div>
-        <div className="dash-time">{time}</div>
+        <span className={`proj-status proj-status--${status.toLowerCase()}`}>{status}</span>
       </div>
 
-      <div className="dash-ext" aria-hidden="true">
-        <Icon>
-          <path
-            fill="currentColor"
-            d="M14 3h7v7h-2V6.4l-9.3 9.3-1.4-1.4L17.6 5H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z"
-          />
-        </Icon>
+      <div className="proj-meta">
+        <div className="proj-row">
+          <Icon>
+            <path
+              fill="currentColor"
+              d="M6 4h12v2H6V4Zm0 4h12v2H6V8Zm0 4h7v2H6v-2Zm0 4h7v2H6v-2Z"
+            />
+          </Icon>
+          <span>{endpoints}</span>
+        </div>
+        <div className="proj-row">
+          <Icon>
+            <path
+              fill="currentColor"
+              d="M5 5h14v10H5V5Zm2 2v6h10V7H7Zm0 9h10v2H7v-2Z"
+            />
+          </Icon>
+          <span>{features}</span>
+        </div>
+        <div className="proj-row proj-row--assign">
+          <Icon>
+            <path
+              fill="currentColor"
+              d="M9 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm6 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6ZM9 13c2.7 0 5 1.4 5 3.2V18H4v-1.8C4 14.4 6.3 13 9 13Zm6 0c.5 0 1 .1 1.5.2A4 4 0 0 1 20 17v1h-4v-1.8c0-.8-.3-1.6-.8-2.2.5-.1 1-.2 1.8-.2Z"
+            />
+          </Icon>
+          <span className="proj-row__label">Assigned To:</span>
+          <div className="proj-pills">
+            {planners.map((p) => (
+              <span key={p.label} className={`proj-pill proj-pill--${p.tone}`}>
+                {p.label}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
+
+      <div className="proj-footer">View Only Access</div>
     </div>
   );
 }
 
-export default function Dashboard() {
+export default function Projects() {
   const navigate = useNavigate();
 
   return (
@@ -106,7 +119,6 @@ export default function Dashboard() {
 
         <div className="dash-nav">
           <SidebarItem
-            active
             label="Dashboard"
             icon={
               <Icon>
@@ -116,17 +128,17 @@ export default function Dashboard() {
                 />
               </Icon>
             }
+            onClick={() => navigate('/dashboard')}
           />
-       <SidebarItem
-  label="Projects"
-  icon={
-    <Icon>
-      <path fill="currentColor" d="M4 6h16v12H4V6Zm2 2v8h12V8H6Z" />
-    </Icon>
-  }
-  onClick={() => navigate('/projects')}
-/>
-
+          <SidebarItem
+            active
+            label="Projects"
+            icon={
+              <Icon>
+                <path fill="currentColor" d="M4 6h16v12H4V6Zm2 2v8h12V8H6Z" />
+              </Icon>
+            }
+          />
           <SidebarItem
             label="API Test Creation"
             icon={
@@ -260,118 +272,57 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="dash-content">
-          <div className="dash-heading">
-            <div className="dash-h1">Dashboard</div>
-            <div className="dash-h2">Welcome to IsoTest AI</div>
+        <div className="proj-content">
+          <div className="proj-breadcrumb">
+            <span>Dashboard</span>
+            <span className="proj-breadcrumb__sep">›</span>
+            <span>Projects</span>
           </div>
 
-          <div className="dash-kpis">
-            <Kpi
-              tone="blue"
-              value="247"
-              label="Total APIs Tested"
-              badge={{ tone: 'good', text: '+12%' }}
+          <div className="proj-header">
+            <h1 className="proj-h1">Project Dashboard</h1>
+            <p className="proj-h2">
+              View and manage API testing projects based on your assigned role.
+            </p>
+            <div className="proj-rolePill">QA Planner</div>
+          </div>
+
+          <div className="proj-sectionTitle">Your Projects</div>
+
+          <div className="proj-list">
+            <ProjectCard
+              title="E-Commerce API Suite"
+              date="Nov 27, 2025"
+              endpoints="45 API Endpoints"
+              features="Features: Payment Gateway, User Auth, Product Catalog"
+              status="Active"
+              planners={[
+                { label: 'Abdur Rahman (QA Planner)', tone: 'blue' },
+                { label: 'Ahmad Mustabssir (Developer)', tone: 'green' },
+              ]}
             />
-            <Kpi
-              tone="teal"
-              value="1,842"
-              label="AI-Generated Test Cases"
-              badge={{ tone: 'good', text: '+28%' }}
+            <ProjectCard
+              title="Banking Core Services"
+              date="Nov 19, 2025"
+              endpoints="78 API Endpoints"
+              features="Features: Transaction API, Account Management, Audit Logs"
+              status="Active"
+              planners={[
+                { label: 'Abdur Rahman (QA Planner)', tone: 'blue' },
+                { label: 'Ahmad Mustabssir (Developer)', tone: 'green' },
+              ]}
             />
-            <Kpi
-              tone="green"
-              value="60%"
-              label="Test Cases Passed"
-              badge={{ tone: 'neutral', text: 'Passed' }}
-            />
-            <Kpi
-              tone="red"
-              value="34"
-              label="Detected Bugs"
-              badge={{ tone: 'danger', text: '5 Critical' }}
+            <ProjectCard
+              title="Healthcare Management System"
+              date="Nov 14, 2025"
+              endpoints="32 API Endpoints"
+              features="Features: Patient Records, Appointments, Billing"
+              status="Pending"
+              planners={[{ label: 'Abdur Rahman (QA Planner)', tone: 'blue' }]}
             />
           </div>
 
-          <div className="dash-grid2">
-            <div className="dash-card">
-              <div className="dash-cardHead">
-                <div>
-                  <div className="dash-cardTitle">Start Testing</div>
-                  <div className="dash-cardSub">Create New API Test</div>
-                </div>
-              </div>
-
-              <div className="dash-actions2">
-                <button type="button" className="dash-btn dash-btn--outline">
-                  <span className="dash-btnIco" aria-hidden="true">
-                    <Icon>
-                      <path
-                        fill="currentColor"
-                        d="M12 3a1 1 0 0 1 1 1v8.6l2.3-2.3a1 1 0 1 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 1.4-1.4L11 12.6V4a1 1 0 0 1 1-1ZM5 18h14v2H5v-2Z"
-                      />
-                    </Icon>
-                  </span>
-                  Upload Swagger/OpenAPI JSON
-                </button>
-
-                <button type="button" className="dash-btn dash-btn--grad">
-                  <span className="dash-btnIco" aria-hidden="true">
-                    <Icon>
-                      <path
-                        fill="currentColor"
-                        d="M4 6h16v10H4V6Zm2 2v6h12V8H6Zm2 9h8v2H8v-2Z"
-                      />
-                    </Icon>
-                  </span>
-                  Use Natural Language Query
-                </button>
-              </div>
-
-              <div className="dash-help">
-                Generate test cases automatically using AI or upload your API specification.
-              </div>
-            </div>
-
-            <div className="dash-card">
-              <div className="dash-cardHead dash-cardHead--row">
-                <div className="dash-cardTitle">Recent Activity</div>
-                <a className="dash-viewAll" href="#" onClick={(e) => e.preventDefault()}>
-                  View All
-                </a>
-              </div>
-
-              <div className="dash-activity">
-                <ActivityRow
-                  status="success"
-                  method="POST"
-                  path="/api/auth/login"
-                  time="2 minutes ago"
-                />
-                <ActivityRow
-                  status="progress"
-                  method="GET"
-                  path="/api/users/{id}"
-                  time="5 minutes ago"
-                  inProgress
-                />
-                <ActivityRow
-                  status="fail"
-                  method="PUT"
-                  path="/api/products/update"
-                  time="12 minutes ago"
-                />
-                <ActivityRow
-                  status="success"
-                  method="DELETE"
-                  path="/api/orders/{id}"
-                  time="23 minutes ago"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="dash-footer">
+          <div className="dash-footer proj-footer">
             Designed by FYP Team – Bahria University 2025
           </div>
         </div>

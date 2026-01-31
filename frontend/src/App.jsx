@@ -3,6 +3,10 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import VerifyCode from './pages/VerifyCode';
 import WalkthroughModal from './components/WalkthroughModal';
 import Dashboard from './pages/Dashboard';
+import Projects from './pages/Projects';
+import AiTestCaseGeneration from './pages/AiTestCaseGeneration';
+import EnvironmentSetup from './pages/EnvironmentSetup';
+import ExecuteTests from './pages/ExecuteTests';
 import './App.css';
 
 function App() {
@@ -230,6 +234,30 @@ function App() {
           path="/dashboard"
           element={
             <Dashboard />
+          }
+        />
+        <Route
+          path="/projects"
+          element={
+            <Projects />
+          }
+        />
+        <Route
+          path="/api-test-creation/ai-test-case-generation"
+          element={
+            <AiTestCaseGeneration />
+          }
+        />
+        <Route
+          path="/environment-setup"
+          element={
+            <EnvironmentSetup />
+          }
+        />
+        <Route
+          path="/test-runs/execute"
+          element={
+            <ExecuteTests />
           }
         />
         <Route
