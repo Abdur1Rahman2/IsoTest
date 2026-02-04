@@ -1,0 +1,24 @@
+version: '3.8'  # Specify the docker-compose version
+
+services:
+
+  redis_container:
+    image: redis:7.2
+    networks:
+      - IsoTest-network
+    container_name: redis
+    ports:
+      - "57999:6379"  # Expose Redis on the default port
+    command: ["redis-server", "--appendonly", "yes"]  # Enable append-only mode
+    volumes:
+      - redis_data:/data  # Persist data in a volume
+
+volumes:
+  redis_data:
+    driver: local
+
+
+networks:
+  IsoTest-network:
+    driver: bridge
+

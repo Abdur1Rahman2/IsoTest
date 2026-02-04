@@ -13,18 +13,53 @@ export function LoginForm({ isSignup, onToggleMode, onLoginSuccess }: LoginFormP
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    confirmPassword: "",
-    role: "qa-engineer",
-    rememberMe: false,
-    acceptTerms: false,
+
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
+    const [genOtpData, setGenOtpData] = useState({
+    email: ""
+
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    const baseUrl = import.meta.env.VITE_API_BASE_URL; // Vite
+    // const baseUrl = process.env.REACT_APP_API_BASE_URL; // CRA
+
+    const response = await fetch(`${baseUrl}/Auth/IAuthFeature/Login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Login failed");
+    }
+
+    const data = await response.json();
+
+    const otpPayload = { email: data.email };
+    setGenOtpData(otpPayload);
+
+    const responseotp = await fetch(`${baseUrl}/Auth/IAuthFeature/GenerateOTP`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "DeviceId": "534534",
+      },
+      body: JSON.stringify(otpPayload),
+    });
     // Simulate successful login and move to 2FA
-    onLoginSuccess(formData.email, formData.role);
-  };
+    onLoginSuccess(data.email, data.role);
+  } catch (error) {
+    console.error("Login error:", error);
+  }
+};
+
 
   return (
     <div className="w-full max-w-md">
@@ -80,7 +115,7 @@ export function LoginForm({ isSignup, onToggleMode, onLoginSuccess }: LoginFormP
         </div>
 
         {/* Confirm Password (only in signup mode) */}
-        {isSignup && (
+        {/* {isSignup && (
           <div>
             <label htmlFor="confirmPassword" className="block text-gray-700 mb-2">
               Confirm Password
@@ -104,10 +139,10 @@ export function LoginForm({ isSignup, onToggleMode, onLoginSuccess }: LoginFormP
               </button>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Role Selector */}
-        <div>
+        {/* <div>
           <label htmlFor="role" className="block text-gray-700 mb-2">
             Role
           </label>
@@ -121,10 +156,10 @@ export function LoginForm({ isSignup, onToggleMode, onLoginSuccess }: LoginFormP
             <option value="developer">Developer</option>
             <option value="manager">Project Manager</option>
           </select>
-        </div>
+        </div> */}
 
         {/* Remember Me & Terms */}
-        <div className="space-y-3">
+        {/* <div className="space-y-3">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -147,7 +182,7 @@ export function LoginForm({ isSignup, onToggleMode, onLoginSuccess }: LoginFormP
               <span className="text-gray-700">I accept the Terms & Conditions</span>
             </label>
           )}
-        </div>
+        </div> */}
 
         {/* Forgot Password Link */}
         {!isSignup && (
