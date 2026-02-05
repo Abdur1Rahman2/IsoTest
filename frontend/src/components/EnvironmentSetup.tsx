@@ -12,15 +12,21 @@ interface EnvironmentSetupProps {
   onBack: () => void;
   onExecute: () => void;
   currentUser: UserData | null;
+  onNavigate?: (screen: string) => void;
+  onLogoutClick?: () => void;
 }
 
-export function EnvironmentSetup({ onBack, onExecute, currentUser }: EnvironmentSetupProps) {
+export function EnvironmentSetup({ onBack, onExecute, currentUser, onNavigate, onLogoutClick }: EnvironmentSetupProps) {
   const isPM = currentUser?.role === "Project Manager";
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar
+        activeScreen="Test Runs"
+        onNavigate={onNavigate}
+        onLogoutClick={onLogoutClick}
+      />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">

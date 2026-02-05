@@ -196,11 +196,26 @@ export default function App() {
   }
 
   if (currentScreen === "env-setup") {
-    return <EnvironmentSetup onBack={() => setCurrentScreen("ai-test-gen")} onExecute={() => setCurrentScreen("execute-tests")} currentUser={currentUser} />;
+    return (
+      <EnvironmentSetup
+        onBack={() => setCurrentScreen("ai-test-gen")}
+        onExecute={() => setCurrentScreen("execute-tests")}
+        currentUser={currentUser}
+        onNavigate={handleSidebarNavigation}
+        onLogoutClick={handleLogoutClick}
+      />
+    );
   }
 
   if (currentScreen === "ai-test-gen") {
-    return <AITestGeneration onBack={() => setCurrentScreen("dashboard")} onProceed={() => setCurrentScreen("env-setup")} />;
+    return (
+      <AITestGeneration
+        onBack={() => setCurrentScreen("dashboard")}
+        onProceed={() => setCurrentScreen("env-setup")}
+        onNavigate={handleSidebarNavigation}
+        onLogoutClick={handleLogoutClick}
+      />
+    );
   }
 
   if (currentScreen === "projects") {

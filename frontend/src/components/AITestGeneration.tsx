@@ -9,13 +9,19 @@ import { ActionBar } from "./ai-test-gen/ActionBar";
 interface AITestGenerationProps {
   onBack: () => void;
   onProceed: () => void;
+  onNavigate?: (screen: string) => void;
+  onLogoutClick?: () => void;
 }
 
-export function AITestGeneration({ onBack, onProceed }: AITestGenerationProps) {
+export function AITestGeneration({ onBack, onProceed, onNavigate, onLogoutClick }: AITestGenerationProps) {
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar
+        activeScreen="API Test Creation"
+        onNavigate={onNavigate}
+        onLogoutClick={onLogoutClick}
+      />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
