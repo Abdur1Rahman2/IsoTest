@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["backend/src/IsoTestAI.Api/IsoTestAI.Api.csproj", "IsoTestAI.Api/"]
+COPY ["backend/src/IsoTestAI.Application/IsoTestAI.Application.csproj", "IsoTestAI.Application/"]
+COPY ["backend/src/IsoTestAI.Domain/IsoTestAI.Domain.csproj", "IsoTestAI.Domain/"]
+COPY ["backend/src/IsoTestAI.Infrastructure/IsoTestAI.Infrastructure.csproj", "IsoTestAI.Infrastructure/"]
+RUN dotnet restore "IsoTestAI.Api/IsoTestAI.Api.csproj"
+COPY backend/src/ .
+WORKDIR "/src/IsoTestAI.Api"
+RUN dotnet build "IsoTestAI.Api.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "IsoTestAI.Api.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "IsoTestAI.Api.dll"]
