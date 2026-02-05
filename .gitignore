@@ -1,24 +1,363 @@
-# Logs
-logs
+# ============================================
+# IsoTest AI - Comprehensive .gitignore
+# ============================================
+
+# ===================================
+# .NET Backend
+# ===================================
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.cache
+*.vsidx
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Entity Framework
+*.mdf
+*.ldf
+*.ndf
+Migrations/
+**/Migrations/
+
+# NuGet
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ===================================
+# Python / AI Engine
+# ===================================
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+.pyenv
+pipenv/
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+*.cover
 *.log
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# pyenv
+.python-version
+
+# ===================================
+# Node.js / React Frontend
+# ===================================
+# Dependencies
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Production builds
+dist/
+dist-ssr/
+build/
+.next/
+out/
 
-# Editor directories and files
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# Testing
+coverage/
+.nyc_output
+
+# Cache
+.cache
+.parcel-cache
+.npm
+.eslintcache
+.stylelintcache
+
+# ===================================
+# Database
+# ===================================
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+
+# PostgreSQL
+*.pgsql
+*.dump
+*.sql.backup
+
+# Database backups
+*.bak
+backups/
+
+# ===================================
+# Docker
+# ===================================
+# Docker volumes
+docker-volumes/
+*.dockerignore
+
+# ===================================
+# IDEs and Editors
+# ===================================
+# Visual Studio Code
 .vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
 !.vscode/extensions.json
-.idea
+!.vscode/*.code-snippets
+.history/
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ===================================
+# Operating System
+# ===================================
+# macOS
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+.directory
+.Trash-*
+.nfs*
+
+# ===================================
+# Logs and Temporary Files
+# ===================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+pnpm-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.#*
+
+# ===================================
+# Security & Secrets
+# ===================================
+# API Keys and Secrets
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+*.pem
+*.key
+*.cert
+secrets/
+config/secrets.json
+appsettings.Development.json
+appsettings.Production.json
+
+# AWS
+.aws/
+
+# Azure
+.azure/
+
+# ===================================
+# Testing & CI/CD
+# ===================================
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+*.VisualState.xml
+TestResult.xml
+coverage/
+.testresults/
+
+# BenchmarkDotNet
+BenchmarkDotNet.Artifacts/
+
+# ===================================
+# Package Managers
+# ===================================
+# npm
+package-lock.json.bak
+
+# yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+# pnpm
+pnpm-lock.yaml
+
+# ===================================
+# OpenAPI / Swagger
+# ===================================
+# Generated OpenAPI files
+**/openapi-generator/
+
+# ===================================
+# Miscellaneous
+# ===================================
+# Certificates
+*.pfx
+*.cer
+
+# Archive files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Large files
+*.iso
+*.dmg
+
+# AI Model files (if stored locally)
+*.pkl
+*.h5
+*.model
+models/
+
+# ===================================
+# Project Specific
+# ===================================
+# Local database files
+local.db
+dev.db
+
+# Test data
+test-data/
+sample-data/
+
+# Documentation builds
+docs/_build/
+docs/.doctrees/
+
+# Coverage reports
+*.lcov
+
+# Keep empty directories (optional)
+!.gitkeep
