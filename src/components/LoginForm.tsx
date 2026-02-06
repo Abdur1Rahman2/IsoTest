@@ -16,49 +16,69 @@ export function LoginForm({ isSignup, onToggleMode, onLoginSuccess }: LoginFormP
 
   });
 
-    const [genOtpData, setGenOtpData] = useState({
+  const [genOtpData, setGenOtpData] = useState({
     email: ""
 
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL; // Vite
-    // const baseUrl = process.env.REACT_APP_API_BASE_URL; // CRA
+    try {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL; // Vite
+      // const baseUrl = process.env.REACT_APP_API_BASE_URL; // CRA
 
-    const response = await fetch(`${baseUrl}/Auth/IAuthFeature/Login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+      const response = await fetch(`${baseUrl}/Auth/IAuthFeature/Login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    if (!response.ok) {
-      throw new Error("Login failed");
+      if (!response.ok) {
+        throw new Error("Login failed");
+      }
+
+      const data = await response.json();
+      console.log("Login response data:", data);
+
+      const otpPayload = { email: data.data.email };
+      setGenOtpData(otpPayload);
+
+      try {
+
+        console.log("otpPayload DATA: ", otpPayload);
+
+        let OtpformData = {
+          email: otpPayload.email
+        }
+
+
+        const responseotp = await fetch(`${baseUrl}/Auth/IAuthFeature/GenerateOTP`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "DeviceId": "534534",
+          },
+          // body: JSON.stringify(otpPayload.email),
+          body: JSON.stringify(OtpformData),
+
+        });
+        console.log("responseotp data", responseotp);
+
+      } catch (error) {
+        console.log("Error generating OTP:", error);
+
+      }
+
+
+      // Simulate successful login and move to 2FA
+      onLoginSuccess(data.email, data.role);
+    } catch (error) {
+      console.error("Login error:", error);
     }
-
-    const data = await response.json();
-
-    const otpPayload = { email: data.email };
-    setGenOtpData(otpPayload);
-
-    const responseotp = await fetch(`${baseUrl}/Auth/IAuthFeature/GenerateOTP`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "DeviceId": "534534",
-      },
-      body: JSON.stringify(otpPayload),
-    });
-    // Simulate successful login and move to 2FA
-    onLoginSuccess(data.email, data.role);
-  } catch (error) {
-    console.error("Login error:", error);
-  }
-};
+  };
 
 
   return (
