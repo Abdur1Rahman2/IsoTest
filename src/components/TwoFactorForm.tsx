@@ -5,10 +5,13 @@ interface TwoFactorFormProps {
   onBack: () => void;
   onVerifySuccess: () => void;
 }
+const OTP_LENGTH = 4;
 
 export function TwoFactorForm({ onBack, onVerifySuccess }: TwoFactorFormProps) {
-  const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
-  const [timeLeft, setTimeLeft] = useState(179); // 2:59 in seconds
+const [code, setCode] = useState<string[]>(
+  Array(OTP_LENGTH).fill("")
+);
+    const [timeLeft, setTimeLeft] = useState(179); // 2:59 in seconds
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // Countdown timer
@@ -38,9 +41,10 @@ export function TwoFactorForm({ onBack, onVerifySuccess }: TwoFactorFormProps) {
     setCode(newCode);
 
     // Auto-focus next input
-    if (value && index < 5) {
-      inputRefs.current[index + 1]?.focus();
-    }
+   if (value && index < OTP_LENGTH - 1) {
+  inputRefs.current[index + 1]?.focus();
+}
+
   };
 
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -55,25 +59,31 @@ export function TwoFactorForm({ onBack, onVerifySuccess }: TwoFactorFormProps) {
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pastedData = e.clipboardData.getData("text").slice(0, 6);
+const pastedData = e.clipboardData
+  .getData("text")
+  .slice(0, OTP_LENGTH);
     
     if (!/^\d+$/.test(pastedData)) return;
 
     const newCode = [...code];
-    for (let i = 0; i < pastedData.length && i < 6; i++) {
+    for (let i = 0; i < pastedData.length; i++) 
+ {
       newCode[i] = pastedData[i];
     }
     setCode(newCode);
 
     // Focus the next empty input or the last one
-    const nextIndex = Math.min(pastedData.length, 5);
+const nextIndex = Math.min(
+  pastedData.length,
+  OTP_LENGTH - 1
+);
     inputRefs.current[nextIndex]?.focus();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const fullCode = code.join("");
-    if (fullCode.length === 6) {
+    if (fullCode.length === OTP_LENGTH) {
       console.log("Verification code submitted:", fullCode);
       // Simulate successful verification
       onVerifySuccess();
@@ -81,7 +91,7 @@ export function TwoFactorForm({ onBack, onVerifySuccess }: TwoFactorFormProps) {
   };
 
   const handleResend = () => {
-    setCode(["", "", "", "", "", ""]);
+setCode(Array(OTP_LENGTH).fill(""));
     setTimeLeft(179);
     inputRefs.current[0]?.focus();
     console.log("Resending verification code...");
@@ -108,7 +118,7 @@ export function TwoFactorForm({ onBack, onVerifySuccess }: TwoFactorFormProps) {
           Secure access using AI-powered automation standards.
         </p>
         <p className="text-gray-700">
-          Enter the 6-digit verification code sent to your email.
+          Enter the 4-digit verification code sent to your email.
         </p>
         <p className="text-gray-500 mt-2">
           qa******@domain.com
@@ -154,7 +164,7 @@ export function TwoFactorForm({ onBack, onVerifySuccess }: TwoFactorFormProps) {
         {/* Verify Button */}
         <button
           type="submit"
-          disabled={code.join("").length !== 6}
+          disabled={code.join("").length !== OTP_LENGTH}
           className="w-full bg-gradient-to-r from-[#1B4DFF] to-[#00A0B0] text-white py-3 rounded-xl hover:shadow-lg hover:shadow-[#1B4DFF]/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
         >
           Verify Code

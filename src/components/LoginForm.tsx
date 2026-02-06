@@ -66,18 +66,20 @@ export function LoginForm({ isSignup, onToggleMode, onLoginSuccess }: LoginFormP
 
         });
         console.log("responseotp data", responseotp);
-
+      
       } catch (error) {
         console.log("Error generating OTP:", error);
 
       }
-
+      
+      
 
       // Simulate successful login and move to 2FA
       onLoginSuccess(data.email, data.role);
     } catch (error) {
       console.error("Login error:", error);
     }
+
   };
 
 
