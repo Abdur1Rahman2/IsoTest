@@ -27,6 +27,7 @@ export default function App() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showWalkthroughModal, setShowWalkthroughModal] = useState(false);
   const [currentUser, setCurrentUser] = useState<UserData | null>(null);
+const [authEmail, setAuthEmail] = useState<string | null>(null);
 
   const handleSidebarNavigation = (menuItem: string) => {
     switch (menuItem) {
@@ -91,33 +92,34 @@ export default function App() {
   };
 
   const handleLoginSuccess = (email: string, role: string) => {
-    // Map role and email to user data
-    let userData: UserData;
-    
-    // Map realistic users based on email or role
-    if (email === "biafatima789@gmail.com" || role === "manager") {
-      userData = {
-        email: "biafatima789@gmail.com",
-        name: "Bia Fatima",
-        role: "Project Manager"
-      };
-    } else if (email === "ahmadmustabassir@gmail.com" || role === "developer") {
-      userData = {
-        email: "ahmadmustabassir@gmail.com",
-        name: "Ahmad Mustabassir",
-        role: "Developer"
-      };
-    } else {
-      userData = {
-        email: "abdurrahman20002@gmail.com",
-        name: "Abdur Rahman",
-        role: "QA Planner"
-      };
-    }
-    
-    setCurrentUser(userData);
-    setCurrentScreen("2fa");
+  console.log("APP → handleLoginSuccess received:", email, role);
+
+  if (!email) {
+    console.error("LoginSuccess called without email");
+    return;
+  }
+
+  const userData: UserData = {
+    email: email,           // REAL email from backend
+    name: email.split("@")[0], // temp name or empty
+    role: mapRole(role),    // optional mapping
   };
+
+  setCurrentUser(userData);
+  setCurrentScreen("2fa");
+  console.log("current user : "+currentUser?.email);
+};
+
+const mapRole = (role: string): UserRole => {
+  switch (role?.toLowerCase()) {
+    case "manager":
+      return "Project Manager";
+    case "developer":
+      return "Developer";
+    default:
+      return "QA Planner";
+  }
+};
 
   if (currentScreen === "documentation") {
     return <Documentation onNavigate={handleSidebarNavigation} onLogoutClick={handleLogoutClick} onBackToDashboard={() => setCurrentScreen("dashboard")} />;
@@ -229,16 +231,24 @@ export default function App() {
     );
   }
 
-  if (currentScreen === "2fa") {
-    return (
-      <>
-        <TwoFactorAuthScreen onBack={() => setCurrentScreen("login")} onVerifySuccess={handle2FASuccess} />
-        {showWalkthroughModal && (
-          <WalkthroughModal onClose={handleWalkthroughClose} onViewDocumentation={handleWalkthroughViewDocs} />
-        )}
-      </>
-    );
-  }
+if (currentScreen =="2fa") {
+  console.log("we are in 2F Auth screen" +currentUser?.email)
+  return (
+    <>
+      <TwoFactorAuthScreen
+        email={currentUser?.email ?? ""}
+        onBack={() => setCurrentScreen("login")}
+        onVerifySuccess={handle2FASuccess}
+      />
 
+      {showWalkthroughModal && (
+        <WalkthroughModal
+          onClose={handleWalkthroughClose}
+          onViewDocumentation={handleWalkthroughViewDocs}
+        />
+      )}
+    </>
+  );
+}
   return <LoginScreen onLoginSuccess={handleLoginSuccess} />;
 }

@@ -2,12 +2,18 @@ import { useState, useRef, useEffect } from "react";
 import { Shield, ArrowLeft } from "lucide-react";
 
 interface TwoFactorFormProps {
+  email: string;
   onBack: () => void;
   onVerifySuccess: () => void;
 }
-const OTP_LENGTH = 4;
 
-export function TwoFactorForm({ onBack, onVerifySuccess }: TwoFactorFormProps) {
+const OTP_LENGTH = 4;
+export function TwoFactorForm({
+  email,
+  onBack,
+  onVerifySuccess,
+}: TwoFactorFormProps) 
+ {
 const [code, setCode] = useState<string[]>(
   Array(OTP_LENGTH).fill("")
 );
@@ -71,8 +77,7 @@ const pastedData = e.clipboardData
       newCode[i] = pastedData[i];
     }
     setCode(newCode);
-
-    // Focus the next empty input or the last one
+        // Focus the next empty input or the last one
 const nextIndex = Math.min(
   pastedData.length,
   OTP_LENGTH - 1
@@ -80,15 +85,48 @@ const nextIndex = Math.min(
     inputRefs.current[nextIndex]?.focus();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const fullCode = code.join("");
-    if (fullCode.length === OTP_LENGTH) {
-      console.log("Verification code submitted:", fullCode);
-      // Simulate successful verification
-      onVerifySuccess();
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const fullCode = code.join("");
+
+  if (fullCode.length !== OTP_LENGTH) return;
+
+  console.log("Verification code submitted:", fullCode);
+
+  try {
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+    const otpFormData = {
+      email: email,
+      otp: fullCode,
+    };
+
+    const response = await fetch(
+      `${baseUrl}/Auth/IAuthFeature/VerifyOTP`,
+      {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "DeviceId": "534534",
+          },
+        body: JSON.stringify(otpFormData),
+      }
+    );
+
+    if (!response.ok) {
+      alert("Verification Failed!");
+      throw new Error("Verification failed");
+
     }
-  };
+
+    onVerifySuccess();
+  } catch (error) {
+    console.error("OTP verification error:", error);
+  }
+};
+
+  
 
   const handleResend = () => {
 setCode(Array(OTP_LENGTH).fill(""));
@@ -121,7 +159,7 @@ setCode(Array(OTP_LENGTH).fill(""));
           Enter the 4-digit verification code sent to your email.
         </p>
         <p className="text-gray-500 mt-2">
-          qa******@domain.com
+          {email}
         </p>
       </div>
 
@@ -136,7 +174,9 @@ setCode(Array(OTP_LENGTH).fill(""));
             {code.map((digit, index) => (
               <input
                 key={index}
-                ref={(el) => (inputRefs.current[index] = el)}
+ref={(el) => {
+  inputRefs.current[index] = el;
+}}
                 type="text"
                 inputMode="numeric"
                 maxLength={1}
