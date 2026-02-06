@@ -2,6 +2,7 @@ import { useState } from "react";
 import { LeftPanel } from "./LeftPanel";
 import { LoginForm } from "./LoginForm";
 
+
 interface LoginScreenProps {
   onLoginSuccess: (email: string, role: string) => void;
 }
